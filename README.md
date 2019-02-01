@@ -5,4 +5,4 @@ This is a set of Java applications, to build your Java skills. These application
 
  Each application has instructions on what to do, and what to pay attention to. Most applications will have several progressions, so that you can slowly build up to the final application. Don't hesitate to ask a review of an intermediate state!
 
- * [01 - Getting Started](projects/01-getting-started.md) - Get Java, Maven & Intellij setup
+ * [01 - Getting Started](projects/01-getting-started.md) - Opinionated way to setup Java, Maven & Intellij
