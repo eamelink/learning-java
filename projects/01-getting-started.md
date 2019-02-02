@@ -95,4 +95,123 @@ So install maven! Using brew:
 
 ## Putting it all together
 
-TODO
+This directory contains a directory `hello-world`, which contains Java project. Let's use it to test your setup.
+
+### Import the project into Intellij
+
+As mentioned before, we don't store Intellij specific files in Git, only the Maven POM file. That means we can't just 'Open' the project in Intellij, we have to 'Import' it. This can be done in two ways, that have the same result. From the Intellij start screen (when no project is open), you can select "Import Project", then open the 'hello-world' directory, and choose "Import project from external model", and "Maven" and then "Next" a couple of times. One of the screens will ask which project SDK to use. For this project, either Java 8 or 11 will be fine. If you don't see your SDK's yet, use the `+` symbol to add them. Normally, they are in `/Library/Java/JavaVirtualMachines/some-jdk-version/Contents/Home`.
+
+### Checking that it works
+
+If the project is successfully imported, you should see the 'hello-world' project show up on the left:
+
+![The Project is Imported](images/project-imported.png)
+
+When you unfold the `src` directory, all the way until you see `HelloWorld.java`, you should notice that the `java` directory is marked in a blue color. This means that Intellij figured out that this is a Java sources directory.
+
+You might want to check out the `pom.xml` file. This is a very minimal one. Notice that in the pom file, nothing like a source directory is configured! Yet Intellij knows what the source directory is. This is because Maven has a convention. If nothing else is configured (and typically, you should not configure it yourself), the default directory for Java source files is `src/main/java`.
+
+When you open the HelloWorld.java file, (beware: the `.java` suffix is not shown in the project view), you'll see that it's highlighted. If you start typing something, it will give you autocompletion, like this:
+
+![Autocompletion](images/completion.png)
+
+And when you type something that isn't correct, Intellij will warn you by underlining the broken files and packages in red:
+
+![Error](images/error.png)
+
+Notice from this last screenshot also the two green arrows in the left margin of the file. These can be used to run the application.
+
+![Run](images/run.png)
+
+After running it, at the bottom of your screen you should see a pane that shows something like:
+
+    Hello world!
+
+    Process finished with exit code 0
+
+This means your application successfully ran!
+
+After running it with the arrow in the margin the first time, Intellij also creates a _Run Configuration_ for you:
+
+![Run Configuration](images/run-configuration.png)
+
+Now you can run the project also using this configuration. That's more convenient, because you can also run it easily when you're not working on the `HelloWorld.java` file.
+
+You can run the selected run configuration also using Control-R.
+
+## Taking a closer look at the HelloWorld.java file
+
+Let's take a better look at the `HelloWorld.java` file. For the uninitiated, it contains a lot of magic incantations.
+
+During your first driving lesson, there's so much to see: roads, traffic signs, lights, pedestrians, cyclists, other cars. It seems you need to pay attention to everything. But for the experienced driver, only that blue car that seems to sway and that child on the sidewalk are things to pay conscious attention to, the other things are processed by the unconscious.
+
+It's similar here. The experienced Java developer will only see very little code and keywords here, processing most of it unconsciously.
+
+Let's go through it line by line:
+
+    package com.lunatech.learningjava;
+
+Java code is organized in packages. Packages form a nested structure, just like directories. In fact, the Java compiler mandates that your directory structure mimics your package structure. That's why `HelloWorld.java` is (looking from the `src/main/java` source directory) in the `com/lunatech/learningjava` directory.
+
+Try changing the package name to something else and observe the error in Intellij instructing you to really stick to this.
+
+    class HelloWorld {
+
+This defines a new _class_. A class serves multiple purposes in Java. We will see these purposes in the next assignments. For now it suffices to say that all code in Java must be inside a class.
+
+    public static void main(String[] args) {
+
+This is a lot to swallow. This code defines a method called `main`. This method takes one argument, called `args`. Java being a statically typed language, requires that you inform it of the type of all the arguments of every method. In this case, the type of the `args` argument is `String[]`. A `String` is basically a piece of text. The name comes from the notion that a piece of text is a string of characters. The `[]` suffix indicates that we don't expect a single `String` here, but an array of strings. An array is basically a list. We'll explain more about Array's later.
+
+Immediately before the name of the method, we indicate what the method returns. Our `main` method returns nothing, and the Java keyword for that is `void`.
+
+Then, we say that this is a `static` method. A `static` method can be called without needing an _instance_ of the class.
+
+Finally, we say that this is a `public` method. `public` is one of the possible _access modifiers_. Access modifiers can be used to control which code is allowed to call a method. Public means that all code is allowed to call this method. We'll see more on access modifiers later.
+
+The `main` method as defined like this is magical: it indicates that this particular class is not just any old class, but a Java _application_. This is a class that the JVM can run as the starting point of an application! To illustrate this, change the name to `main2` and observe that the green triangle that we used to run the application in the margin of the file disappears! Removing `static` or `public`, changing `String[]` to `String` or `void` to `String` all have the same effect: it's no longer the method that the JVM expects to be able to start the application.
+
+    String message = "Hello world!";
+
+This creates a variable of type `String` with the name `message`, and assigns it the value `"Hello world"`. The latter is a _String literal_.
+
+People have been calling Java _verbose_ for a long time, and this line shows one of the reasons why. On the right side of the `=`-symbol, we have a `String`. We want to create a new variable `message`, and assign a String to it. Obviously, the compiler can infer in this case that the type of `message` should be `String`. Now in this example it's not even the worst, but consider the following:
+
+    ArrayList<String> strings = new ArrayList<String>();
+
+Here we create a new variable `strings` of type `ArrayList<String>`, and immediately initialize it to a new ArrayList<String> instance.
+
+This duplication is awkward, but it's how Java has been for many years. But with Java 11, finally this has been improved. Java 11 has _local type inference_, meaning that the compiler can infer the type of a variable in some cases. The above cases can now be written as:
+
+    var message = "Hello world!";  
+    var strings = new ArrayList<String>();
+
+Give this a try if you're using Java 11!
+
+The last non-trivial line of the file is:
+
+    System.out.println(message);
+
+This retrieves the `out` field on the `System` class. The `out` field has type `PrintStream`. In Intellij you can learn this by selecting it, and hitting Ctrl-Shift-P.
+
+`PrintStream` has a method `println`, which takes a String and prints it, appending a newline to it.
+
+*This* particular `PrintStream` instance prints to the console. That's not an intrinsic feature of `PrintStream` through. `PrintStream` is an abstraction for 'things to which you can print something', and the `PrintStream` instance that you get with `System.out` happens to be one that's connected to the stdout of your JVM.
+
+This concludes the Getting Started section. It's by no means a full Java Tutorial, but hopefully it helped you through some parts of getting your environment ready that's typically difficult to do without an experienced Java developer sitting next to you.
+
+## Exercise
+
+A Java project can have multiple classes with `main` method. Create a new file `BMICalculator.java` next to `HelloWorld.java`.
+
+Make a Body Mass Index calculator, that takes two parameters, one for the person's length and one for the person's weight.
+
+Figure out how to pass parameters to your application (Hint: Do this in the Run Configuration of Intellij. They will end up in the `args` argument of the main method).
+
+Make your application print the BMI.
+
+Make your application also print the classification of the BMI (underweight, healthy, overweight, obese, etc.).
+
+Add JUnit as a dependency to your application.
+
+Create a unit test for the BMI calculation method.
