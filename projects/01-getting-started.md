@@ -212,6 +212,8 @@ Make your application print the BMI.
 
 Make your application also print the classification of the BMI (underweight, healthy, overweight, obese, etc.).
 
+Use the 'jansi' library to color the output. A healthy BMI should give a green message, obese red and in between something yellow or orange!
+
 Add JUnit as a dependency to your application.
 
 Create a unit test for the BMI calculation method.
